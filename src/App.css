@@ -58,3 +58,29 @@
   align-items: flex-start;
   justify-content: flex-end;
 }
+
+.users-to-fetch-dropdown-container {
+  padding: 5px 0 10px 0;
+  display: flex;
+  font-size: 20px;
+  font-weight: 500;
+  flex-direction: row;
+  height: 100px;
+  align-items: center;
+  justify-content: space-evenly;
+  color: #8a15fff7;
+  text-shadow: 0px 0px 20px #000000;
+}
+
+.user-select-box {
+  height: 22px;
+  width: 65px;
+  color: lavender;
+  background-color: #292a2d;
+  border: 1px solid lavender;
+  outline: none;
+}
+
+.user-select-box:hover {
+  box-shadow: 0px 0px 5px 0px #8a15ffbf;
+}

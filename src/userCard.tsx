@@ -1,9 +1,10 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { userType } from "./App";
 import "./App.css";
 
 interface usersType {
   user: userType;
+  id: number;
 }
 
 const UserCard = memo(function UserCard(props: usersType) {
@@ -17,6 +18,7 @@ const UserCard = memo(function UserCard(props: usersType) {
         />
       </div>
       <div className="user-details-container">
+        <div>User no: {props.id + 1}</div>
         <div className="user-name">{`Name: ${props.user.name}`}</div>
         <div className="user-gender">{`Gender: ${props.user.gender}`}</div>
         <div className="user-contact">{`Contact: ${props.user.contact}`}</div>

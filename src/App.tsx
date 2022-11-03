@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { InfinitySpin } from "react-loader-spinner";
 import "./App.css";
 import UserCard from "./userCard";
-import { InfinitySpin } from "react-loader-spinner";
 
 var fetchIcon = require("./assets/fetch-icon-sm.png");
+
+interface genderTypes {
+  male: string;
+  female: string;
+}
+
+interface countryTypes {
+  fr: string;
+  in: string;
+}
 
 export interface userType {
   userImageURL: string;
@@ -19,32 +29,9 @@ export interface userType {
 function App() {
   const [users, setUsers] = useState<userType[]>();
   const [isLoading, setisLoading] = useState(false);
-
-  // Fetch users on button click
-  const fetchUser = async () => {
-    setisLoading(true);
-    const response = await fetch("https://randomuser.me/api/?results=100");
-    const userData = await response.json();
-
-    const userList = userData.results;
-
-    //Map the response data to what's needed
-    const customUserList: userType[] = [];
-    userList.forEach((user: any) => {
-      customUserList.push({
-        userImageURL: user.picture.large,
-        name: `${user.name.first} ${user.name.last}`,
-        gender: user.gender,
-        email: user.email,
-        city: user.location.city,
-        state: user.location.state,
-        country: user.location.country,
-        contact: user.cell,
-      });
-    });
-
-    setUsers([...customUserList]);
-  };
+  const [usersToFetch, setusersToFetch] = useState<number>(10);
+  const [gender, setGender] = useState<genderTypes | undefined>(undefined);
+  const [country, setCountry] = useState<countryTypes | undefined>(undefined);
 
   //Hides the loader after the api call is finished i.e users are set in the state
   useEffect(() => {
@@ -53,6 +40,7 @@ function App() {
 
   // Fetches 10 users on component mount
   useEffect(() => {
+    console.log("fetching 10 users on mount");
     setisLoading(true);
 
     fetch("https://randomuser.me/api/?results=10")
@@ -79,17 +67,43 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    console.log("gender:", gender);
+  }, [gender]);
   return (
     <div>
       <div className="header">
         <div className="header-title">Fetch Random Users!</div>
-        <img
-          className="fetch-button"
-          role={"button"}
-          src={fetchIcon}
-          onClick={fetchUser}
-          alt=""
-        />
+        <div className="users-to-fetch-dropdown-container">
+          <UsersToFetchDropdown
+            usersToFetch={usersToFetch}
+            setusersToFetch={setusersToFetch}
+          />
+          <div
+            style={{
+              borderLeft: "1px solid lavender",
+              width: "2px",
+              height: "100%",
+            }}
+          ></div>
+          <div>
+            <FetchUserFilters
+              gender={gender}
+              setGender={setGender}
+              country={country}
+              setCountry={setCountry}
+            />
+          </div>
+        </div>
+        <div className="fetch-button-container">
+          <FetchButton
+            setisLoading={setisLoading}
+            usersToFetch={usersToFetch}
+            setUsers={setUsers}
+            gender={gender}
+            country={country}
+          />
+        </div>
       </div>
 
       {isLoading ? (
@@ -100,7 +114,7 @@ function App() {
         users?.map((user, idx) => {
           return (
             <div key={idx}>
-              <UserCard user={user} />
+              <UserCard user={user} id={idx} />
               <br></br>
             </div>
           );
@@ -109,5 +123,155 @@ function App() {
     </div>
   );
 }
+
+interface fetchButtonProps {
+  setisLoading: (bool: boolean) => void;
+  usersToFetch: number;
+  setUsers: (users: userType[]) => void;
+  gender: genderTypes | undefined;
+  country: countryTypes | undefined;
+}
+
+// Fetch users on button click
+const FetchButton = (props: fetchButtonProps) => {
+  const API_ENDPOINT = "https://randomuser.me/api/";
+
+  const getGender = (gender: genderTypes | undefined) =>
+    gender ? `&gender=${gender}` : "";
+
+  const getCountry = (country: countryTypes | undefined) =>
+    country ? `&nat=${country}` : "";
+
+  const fetchUser = async () => {
+    props.setisLoading(true);
+    console.log(`fetching ${props.usersToFetch} users on click`);
+
+    const response = await fetch(
+      `${API_ENDPOINT}?results=${props.usersToFetch}${getGender(
+        props.gender
+      )}${getCountry(props.country)}`
+    );
+    const userData = await response.json();
+
+    const userList = userData.results;
+
+    //Map the response data to what's needed
+    const customUserList: userType[] = [];
+    userList.forEach((user: any) => {
+      customUserList.push({
+        userImageURL: user.picture.large,
+        name: `${user.name.first} ${user.name.last}`,
+        gender: user.gender,
+        email: user.email,
+        city: user.location.city,
+        state: user.location.state,
+        country: user.location.country,
+        contact: user.cell,
+      });
+    });
+
+    props.setUsers([...customUserList]);
+  };
+  return (
+    <img
+      className="fetch-button"
+      role={"button"}
+      src={fetchIcon}
+      onClick={fetchUser}
+      alt=""
+    />
+  );
+};
+interface usersToFetchDropdownTypes {
+  usersToFetch: number;
+  setusersToFetch: (users: number) => void;
+}
+const UsersToFetchDropdown = (props: usersToFetchDropdownTypes) => {
+  const handleUsersToFetch = (e: any) => {
+    e.preventDefault();
+    props.setusersToFetch(e.target.value);
+  };
+
+  return (
+    <div
+      style={{
+        height: "30px",
+        width: "370px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "flex-end",
+        justifyContent: "space-evenly",
+      }}
+    >
+      <label htmlFor="fetch-dropdown">{`Select number of user to fetch: `}</label>
+      <select
+        value={props.usersToFetch}
+        name="fetch"
+        id="fetch-dropdown"
+        onChange={handleUsersToFetch}
+        className="user-select-box"
+      >
+        <option value={1}>1</option>
+        <option value={10}>10</option>
+        <option value={30}>30</option>
+        <option value={50}>50</option>
+        <option value={200}>200</option>
+      </select>
+    </div>
+  );
+};
+
+interface fetchUserFilterTypes {
+  gender: genderTypes | undefined;
+  setGender: (gender: genderTypes | undefined) => void;
+  country: countryTypes | undefined;
+  setCountry: (country: countryTypes | undefined) => void;
+}
+const FetchUserFilters = (props: fetchUserFilterTypes) => {
+  const handleGenderSelection = (e: any) => {
+    if (e.target.value === "All") props.setGender(undefined);
+    else props.setGender(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const handleCountrySelection = (e: any) => {
+    if (e.target.value === "All") props.setCountry(undefined);
+    else props.setCountry(e.target.value);
+    console.log(e.target.value);
+  };
+
+  return (
+    <>
+      <div>
+        <label htmlFor="gender-dropdown">{`Gender: `}</label>
+        <select
+          value={undefined}
+          name="gender"
+          id="gender-dropdown"
+          onChange={handleGenderSelection}
+          className="user-select-box"
+        >
+          <option value={undefined}>All</option>
+          <option value={"male"}>Male</option>
+          <option value={"female"}>Female</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="nationality-dropdown">{`Country: `}</label>
+        <select
+          value={undefined}
+          name="nationality"
+          id="nationality-dropdown"
+          onChange={handleCountrySelection}
+          className="user-select-box"
+        >
+          <option value={undefined}>All</option>
+          <option value={"fr"}>France</option>
+          <option value={"in"}>India</option>
+        </select>
+      </div>
+    </>
+  );
+};
 
 export default App;
