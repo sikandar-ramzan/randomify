@@ -10,7 +10,14 @@
   font-weight: 700;
   margin: 20px;
   color: #8a15fff7;
-  text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.6);
+  text-shadow: 0px 0px 20px #000000;
+}
+
+.loader-animation {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 30vh;
 }
 
 .user-image-container {
@@ -30,6 +37,7 @@
 
 .fetch-button:hover {
   box-shadow: 0px -20px 8px 0px #8a15ffbf inset;
+  cursor: pointer;
 }
 
 .user-card {
