@@ -1,38 +1,52 @@
-.App {
-  text-align: center;
+.header {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.header-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 20px;
+  color: #8a15fff7;
+  text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.6);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.user-image-container {
+  padding-bottom: 5px;
+}
+.user-image {
+  border-radius: 70px;
+  box-shadow: 0px 0px 12px #8a15ffbf;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.fetch-button {
+  height: 50px;
+  width: 50px;
+  border-radius: 3px;
+  box-shadow: 0px 20px 8px 0px #8a15ffbf inset;
+}
+
+.fetch-button:hover {
+  box-shadow: 0px -20px 8px 0px #8a15ffbf inset;
+}
+
+.user-card {
+  color: lavender;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 25px 0 0 20px;
+  border-bottom: 2px solid #8a15fff7;
+  border-left: 2px solid #8a15fff7;
+  width: fit-content;
+}
+
+.user-details-container {
+  margin-left: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  align-items: flex-start;
+  justify-content: flex-end;
 }
