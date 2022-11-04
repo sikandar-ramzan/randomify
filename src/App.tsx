@@ -114,6 +114,10 @@ function App() {
           })}
         </div>
       )}
+
+      <footer>
+        <div className="footer">&copy; Sikandar Ramzan</div>
+      </footer>
     </div>
   );
 }

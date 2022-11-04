@@ -129,3 +129,14 @@
     margin-left: 80px;
   }
 }
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 19px;
+  font-weight: 500;
+  margin: 5px 5px 20px 5px;
+  color: #8a15fff7;
+  text-shadow: 0px 0px 20px #000000;
+}
