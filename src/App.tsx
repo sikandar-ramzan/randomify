@@ -71,29 +71,21 @@ function App() {
     console.log("gender:", gender);
   }, [gender]);
   return (
-    <div>
+    <div className="container">
       <div className="header">
-        <div className="header-title">Fetch Random Users!</div>
-        <div className="users-to-fetch-dropdown-container">
+        <div className="header-title">Randomify</div>
+        <div className="header-subtitle">Fetch Random Users!</div>
+        <div className="user-filters-container">
           <UsersToFetchDropdown
             usersToFetch={usersToFetch}
             setusersToFetch={setusersToFetch}
           />
-          <div
-            style={{
-              borderLeft: "1px solid lavender",
-              width: "2px",
-              height: "100%",
-            }}
-          ></div>
-          <div>
-            <FetchUserFilters
-              gender={gender}
-              setGender={setGender}
-              country={country}
-              setCountry={setCountry}
-            />
-          </div>
+          <FetchUserFilters
+            gender={gender}
+            setGender={setGender}
+            country={country}
+            setCountry={setCountry}
+          />
         </div>
         <div className="fetch-button-container">
           <FetchButton
@@ -111,14 +103,16 @@ function App() {
           <InfinitySpin width="200" color="#8a15fff7" />
         </div>
       ) : (
-        users?.map((user, idx) => {
-          return (
-            <div key={idx}>
-              <UserCard user={user} id={idx} />
-              <br></br>
-            </div>
-          );
-        })
+        <div className="cards-container">
+          {users?.map((user, idx) => {
+            return (
+              <div key={idx}>
+                <UserCard user={user} id={idx} />
+                <br></br>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );
@@ -193,23 +187,17 @@ const UsersToFetchDropdown = (props: usersToFetchDropdownTypes) => {
   };
 
   return (
-    <div
-      style={{
-        height: "30px",
-        width: "370px",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "flex-end",
-        justifyContent: "space-evenly",
-      }}
-    >
-      <label htmlFor="fetch-dropdown">{`Select number of user to fetch: `}</label>
+    <div>
+      <label
+        className={"select-label"}
+        htmlFor="fetch-dropdown"
+      >{`Select number of users: `}</label>
       <select
         value={props.usersToFetch}
         name="fetch"
         id="fetch-dropdown"
         onChange={handleUsersToFetch}
-        className="user-select-box"
+        className="select-box"
       >
         <option value={1}>1</option>
         <option value={10}>10</option>
@@ -243,13 +231,16 @@ const FetchUserFilters = (props: fetchUserFilterTypes) => {
   return (
     <>
       <div>
-        <label htmlFor="gender-dropdown">{`Gender: `}</label>
+        <label
+          className="select-label"
+          htmlFor="gender-dropdown"
+        >{`Gender: `}</label>
         <select
           value={undefined}
           name="gender"
           id="gender-dropdown"
           onChange={handleGenderSelection}
-          className="user-select-box"
+          className="select-box"
         >
           <option value={undefined}>All</option>
           <option value={"male"}>Male</option>
@@ -257,13 +248,16 @@ const FetchUserFilters = (props: fetchUserFilterTypes) => {
         </select>
       </div>
       <div>
-        <label htmlFor="nationality-dropdown">{`Country: `}</label>
+        <label
+          className="select-label"
+          htmlFor="nationality-dropdown"
+        >{`Country: `}</label>
         <select
           value={undefined}
           name="nationality"
           id="nationality-dropdown"
           onChange={handleCountrySelection}
-          className="user-select-box"
+          className="select-box"
         >
           <option value={undefined}>All</option>
           <option value={"fr"}>France</option>
